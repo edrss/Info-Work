@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Devoir S4 - Informatique</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+
+  body {
+    background: #f0fdf4; /* VERT TRÈS CLAIR au lieu de bleu */
+    color: #1e293b;
+    padding: 40px 5%;
+    min-height: 100vh;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    gap: 20px;
+    flex-wrap: wrap;
+    border-bottom: 2px solid #d1fae5; /* Ligne de séparation verte */
+    padding-bottom: 20px;
+  }
+
+.titre-bloc h1 {
+    color: #047857; /* VERT FONCÉ */
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    margin-bottom: 5px;
+  }
+
+.titre-bloc.info {
+    color: #4b5563;
+    font-size: 0.9rem;
+  }
+
+  button {
+    background: #10b981; /* VERT ÉMERAUDE */
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+    box-shadow: 0 2px 5px rgba(16, 185, 129, 0.3);
+    flex-shrink: 0;
+  }
+
+  button:hover { background: #059669; transform: translateY(-1px); } /* VERT PLUS FONCÉ */
+
+.contenu-quiz {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: left;
+  }
+
+  #question {
+    font-weight: 700;
+    font-size: clamp(1.1rem, 3vw, 1.4rem);
+    color: #065f46;
+    margin-bottom: 20px;
+    min-height: 50px;
+  }
+
+  #reponse {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    border-left: 4px solid #10b981; /* BORDURE VERTE */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    line-height: 1.7;
+    font-size: 1rem;
+    margin-top: 15px;
+    display: none;
+  }
+
+.compteur { margin-top: 15px; color: #047857; font-size: 0.9rem; font-weight: 600; text-align: center; }
+</style>
+</head>
+<body>
+
+  <header>
+    <div class="titre-bloc">
+      <h1>Devoir Finale S4</h1> <!-- Titre changé -->
+      <p class="info">Collège CATTS PRESSOIR | Enseignant: David Bélony</p>
+    </div>
+    <button id="btn">Commencer</button>
+  </header>
+
+  <div class="contenu-quiz">
+    <p id="question"></p>
+    <div id="reponse"></div>
+    <p class="compteur" id="compteur"></p>
+  </div>
+
+<script>
+  const donnees = [
+    {
+      q: "1. En quoi l’informatique peut vous aider à améliorer votre quotidien?",
+      r: "L’informatique rend la vie plus simple et rapide. Avec mon téléphone et internet, je peux payer mes factures, suivre mes cours en ligne, communiquer avec ma famille à l’étranger en 2 secondes, et organiser mon emploi du temps avec un calendrier. Ça évite beaucoup de perte de temps et de déplacement."
+    },
+    {
+      q: "2. En quoi l’informatique peut vous aider à planifier votre avenir?",
+      r: "L’informatique est un outil de planification puissant. Je peux faire des recherches sur les métiers d’avenir, suivre des formations gratuites en ligne comme le codage ou le design, créer un CV numérique, et utiliser Excel pour gérer mon budget pour mes études. Elle me donne accès à des opportunités partout dans le monde."
+    },
+    {
+      q: "3. En quoi l’informatique peut vous aider à vous préparer pour l’université?",
+      r: "À l’université, tout passe par l’informatique. Je vais devoir rédiger des rapports sur Word, faire des présentations PowerPoint, chercher des articles scientifiques sur Google Scholar, et utiliser des logiciels spécialisés. Savoir utiliser un ordinateur dès maintenant me donne une grosse avance et évite le stress le jour J."
+    }
+  ];
+
+  let index = 0;
+  let etat = 'accueil';
+  const btn = document.getElementById('btn');
+  const questionEl = document.getElementById('question');
+  const reponseEl = document.getElementById('reponse');
+  const compteurEl = document.getElementById('compteur');
+
+  function gererClic() {
+    if (etat === 'accueil') {
+      questionEl.textContent = donnees[index].q;
+      reponseEl.style.display = 'none';
+      compteurEl.textContent = `Question ${index + 1} / ${donnees.length}`;
+      btn.textContent = "Afficher la réponse";
+      etat = 'question';
+    } else if (etat === 'question') {
+      reponseEl.textContent = donnees[index].r;
+      reponseEl.style.display = 'block';
+      btn.textContent = "Question suivante";
+      etat = 'reponse';
+    } else if (etat === 'reponse') {
+      index++;
+      if (index < donnees.length) {
+        questionEl.textContent = donnees[index].q;
+        reponseEl.style.display = 'none';
+        compteurEl.textContent = `Question ${index + 1} / ${donnees.length}`;
+        btn.textContent = "Afficher la réponse";
+        etat = 'question';
+      } else {
+        questionEl.textContent = "Devoir Réussi ✓"; // Texte changé
+        reponseEl.style.display = 'none';
+        compteurEl.textContent = `3 / 3`;
+        btn.textContent = "Recommencer";
+        etat = 'fini';
+      }
+    } else if (etat === 'fini') {
+      index = 0;
+      etat = 'accueil';
+      questionEl.textContent = "";
+      compteurEl.textContent = "";
+      btn.textContent = "Commencer";
+    }
+  }
+
+  btn.addEventListener('click', gererClic);
+</script>
+
+</body>
+</html>
